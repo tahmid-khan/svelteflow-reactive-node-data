@@ -16,34 +16,34 @@
 	 */
 	const messages: Record<number, Record<string, string>> = {
 		0: {
-			'node0': 'node0: time = 0',
-			'node1': 'node1: time = 0',
-			'node2': 'node2: time = 0'
+			node0: 'node0: time = 0',
+			node1: 'node1: time = 0',
+			node2: 'node2: time = 0'
 		},
 		1: {
-			'node0': 'node0: time = 1',
-			'node1': 'node1: time = 1',
-			'node2': 'node2: time = 1'
+			node0: 'node0: time = 1',
+			node1: 'node1: time = 1',
+			node2: 'node2: time = 1'
 		},
 		2: {
-			'node0': 'node0: time = 2',
-			'node1': 'node1: time = 2',
-			'node2': 'node2: time = 2'
+			node0: 'node0: time = 2',
+			node1: 'node1: time = 2',
+			node2: 'node2: time = 2'
 		},
 		3: {
-			'node0': 'node0: time = 3',
-			'node1': 'node1: time = 3',
-			'node2': 'node2: time = 3'
+			node0: 'node0: time = 3',
+			node1: 'node1: time = 3',
+			node2: 'node2: time = 3'
 		},
 		4: {
-			'node0': 'node0: time = 4',
-			'node1': 'node1: time = 4',
-			'node2': 'node2: time = 4'
+			node0: 'node0: time = 4',
+			node1: 'node1: time = 4',
+			node2: 'node2: time = 4'
 		},
 		5: {
-			'node0': 'node0: time = 5',
-			'node1': 'node1: time = 5',
-			'node2': 'node2: time = 5'
+			node0: 'node0: time = 5',
+			node1: 'node1: time = 5',
+			node2: 'node2: time = 5'
 		}
 	};
 
@@ -61,12 +61,27 @@
 		} satisfies Node;
 	});
 
+	// Update nodes’ data when `time` changes
+	$: updateNodeData(time), console.log(`time: ${time}`);
+	function updateNodeData(time: number) {
+		$nodes.forEach((node) => {
+			node.data = {
+				message: messages[time][node.id]
+			};
+			$nodes = $nodes;
+			console.log(node.data, $nodes);
+		});
+	}
+
 	const nodes: Writable<Node[]> = writable(initialNodes);
 	const edges: Writable<Edge[]> = writable([]);
 	const nodeTypes: NodeTypes = { node: CustomNode };
 </script>
 
 <main>
+	<label for="time">Time: </label>
+	<input id="time" type="number" min="0" max="5" bind:value={time} />
+
 	<SvelteFlow {nodes} {edges} {nodeTypes} fitView>
 		<Background />
 	</SvelteFlow>
